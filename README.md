@@ -25,7 +25,7 @@ A minimal and slick clipboard history manager that pops up when you press **Cont
 To run the app locally, clone this repo and open the project in Xcode:
 
 ```bash
-git clone https://github.com/shepherrrd/ClipboardManager.git
+git clone https://github.com/shepherrrd/homebrew-cliped.git
 cd ClipboardManager
 open ClipBoardManager.xcodeproj
 ```
@@ -52,7 +52,7 @@ Then:
 
 You can install the app using the `.dmg` installer:
 
-1. [⬇️ Download the latest `.dmg` file here](https://github.com/shepherrrd/homebrew-clipboard-manager/releases/latest)
+1. [⬇️ Download the latest `.dmg` file here](https://github.com/shepherrrd/homebrew-cliped/releases/latest)
 2. Open the `.dmg` and drag **ClipBoardManager.app** into **Applications**
 3. Press `Control + V` anywhere to use the app 🎉
 
@@ -63,8 +63,8 @@ You can install the app using the `.dmg` installer:
 If you have [Homebrew](https://brew.sh) installed, you can install using:
 
 ```bash
-brew tap shepherrrd/clipboard-manager
-brew install --cask clipboard-manager
+brew tap shepherrrd/cliped
+brew install --cask cliped
 ```
 
 > You can now launch it from Spotlight or by pressing `Control + V`
