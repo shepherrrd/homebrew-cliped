@@ -67,6 +67,29 @@ If you have [Homebrew](https://brew.sh) installed, you can install using:
 brew tap shepherrrd/cliped
 brew install --cask cliped
 ```
+### 🛡 macOS Gatekeeper Notice
+
+If you see the error:
+
+> **“Cliped” cannot be opened because Apple cannot check it for malicious software.**
+
+This is expected since **Cliped** is a free and open-source app not yet notarized by Apple.
+
+#### ✅ How to Open It Anyway:
+
+1. **Try opening Cliped** by double-clicking it. You'll see a warning.
+2. Open **System Settings** → **Privacy & Security**.
+3. Scroll down to the **Security** section.
+4. You should see a message like:
+   > `"Cliped" was blocked from use because it is not from an identified developer.`
+5. Click **🟢 Open Anyway**.
+6. A new dialog will appear. Click **Open** to confirm.
+
+> This process only needs to be done once. After that, Cliped will open normally.
+
+---
+
+💡 We're working on making Cliped [notarized and universal](https://developer.apple.com/documentation/security/notarizing_macos_software_before_distribution), but in the meantime, this is the safest workaround for early users.
 
 > You can now launch it from Spotlight or by pressing `Control + V`
 
