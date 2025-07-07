@@ -14,7 +14,11 @@
 		</data>
 		<key>Resources/README.md</key>
 		<data>
-		nqnT7XqCuRODy+KdYIfCb59UUb0=
+		9WxAKTl4VQzF3uuGQIM+JcNEi9g=
+		</data>
+		<key>Resources/test.txt</key>
+		<data>
+		pOkqdoT27Q9hlPhT2X/+HdrJMWs=
 		</data>
 	</dict>
 	<key>files2</key>
@@ -37,7 +41,14 @@
 		<dict>
 			<key>hash2</key>
 			<data>
-			HEYG2jtY61Gg8qI5RUtMrkB2Fku3OlwCAz07kyvHlNw=
+			LY+LJIR5Kwsl7eqzCQUF7jvVzm+rlcyEztGuQVZ8TZE=
+			</data>
+		</dict>
+		<key>Resources/test.txt</key>
+		<dict>
+			<key>hash2</key>
+			<data>
+			VltqS2SE1dNqqL1JkI/TAv16RnDKPmzyCj7V9H5w334=
 			</data>
 		</dict>
 	</dict>
