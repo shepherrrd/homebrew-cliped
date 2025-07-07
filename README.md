@@ -40,6 +40,7 @@ Then:
 
 ---
 
+
 ## 💻 System Requirements
 
 - macOS 12.0 Monterey or later
@@ -68,6 +69,56 @@ brew install --cask cliped
 ```
 
 > You can now launch it from Spotlight or by pressing `Control + V`
+
+---
+
+## 🔄 Updating Cliped to the Latest Version
+
+If you've already installed Cliped via Homebrew and want to update to the latest version, follow these steps:
+
+### 1. 🧼 Uninstall the old version
+Remove the currently installed version of Cliped:
+
+```bash
+brew uninstall --cask cliped
+```
+
+---
+
+### 2. 🔁 Update Homebrew
+
+Make sure your Homebrew repositories are up to date:
+
+```bash
+brew update
+brew upgrade
+```
+
+---
+
+### 3. ⬇️ Reinstall the latest version of Cliped
+
+Now, reinstall Cliped from the latest release:
+
+```bash
+brew install --cask cliped
+```
+
+If you already have it installed and just want to force an update:
+
+```bash
+brew reinstall --cask cliped
+```
+
+---
+
+### 4. 🧠 (Optional) Check if a newer version is available
+
+You can check whether your installed version is outdated using:
+
+```bash
+brew outdated
+```
 
 ---
 
