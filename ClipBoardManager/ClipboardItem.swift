@@ -1,23 +1,14 @@
-//
-//  ClipboardItem.swift
-//  ClipBoardManager
-//
-//  Created by MAC on 07/07/2025.
-//
-
-
 import Foundation
 
-struct ClipboardItem: Identifiable, Codable {
+struct ClipboardItem: Identifiable, Equatable, Codable {
     let id = UUID()
     let content: String
     let timestamp: Date
-    let deviceName: String
+    let device: String
 
-    var formattedDate: String {
-        let formatter = DateFormatter()
-        formatter.dateStyle = .short
-        formatter.timeStyle = .short
-        return formatter.string(from: timestamp)
+    static func == (lhs: ClipboardItem, rhs: ClipboardItem) -> Bool {
+        lhs.content == rhs.content &&
+        lhs.timestamp == rhs.timestamp &&
+        lhs.device == rhs.device
     }
 }

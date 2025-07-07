@@ -1,3 +1,5 @@
+
+
 import SwiftUI
 
 struct VisualEffectView: NSViewRepresentable {

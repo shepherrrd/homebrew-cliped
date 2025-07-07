@@ -1,43 +1,52 @@
 import Cocoa
 import SwiftUI
-import Carbon.HIToolbox
 
 class AppDelegate: NSObject, NSApplicationDelegate {
-    var clipboardMonitor: ClipboardMonitor?
-    var popupWindow: NSWindow?
+    var statusItem: NSStatusItem!
+    var popupWindow: NSWindow!
+    var monitor = ClipboardMonitor()
 
     func applicationDidFinishLaunching(_ notification: Notification) {
-        clipboardMonitor = ClipboardMonitor()
-        clipboardMonitor?.startMonitoring()
-
-        HotkeyManager.shared.registerHotkey(modifiers: [.control], key: kVK_ANSI_V) {
-            self.showPopup()
+        // Set up ⌃ + V global shortcut
+        NSEvent.addGlobalMonitorForEvents(matching: .keyDown) { event in
+            if event.modifierFlags.contains(.control) && event.keyCode == 9 {
+                self.togglePopup()
+            }
         }
+
+        // Setup system tray icon
+        statusItem = NSStatusBar.system.statusItem(withLength: NSStatusItem.squareLength)
+        if let button = statusItem.button {
+            button.image = NSImage(systemSymbolName: "doc.on.clipboard", accessibilityDescription: nil)
+            button.action = #selector(togglePopup)
+        }
+
+        createPopup()
     }
 
-    func showPopup() {
-        if popupWindow != nil {
-            popupWindow?.close()
-        }
-
-        guard let monitor = clipboardMonitor else { return }
-
-        print("🪟 Showing clipboard popup")
-
-        let popup = NSWindow(
-            contentRect: NSRect(x: 100, y: 100, width: 320, height: 450),
-            styleMask: [.titled, .closable],
+    func createPopup() {
+        let contentView = ContentView(monitor: monitor)
+        popupWindow = NSWindow(
+            contentRect: NSRect(x: 0, y: 0, width: 400, height: 300),
+            styleMask: [.titled, .fullSizeContentView],
             backing: .buffered,
             defer: false
         )
+        popupWindow.center()
+        popupWindow.isReleasedWhenClosed = false
+        popupWindow.level = .floating
+        popupWindow.isOpaque = false
+        popupWindow.backgroundColor = .clear
+        popupWindow.contentView = NSHostingView(rootView: contentView)
+    }
 
-        popup.isReleasedWhenClosed = false
-        popup.level = .floating
-        popup.hasShadow = true
-        popup.center()
-
-        popup.contentView = NSHostingView(rootView: ContentView(monitor: monitor))
-        popup.makeKeyAndOrderFront(nil)
-        self.popupWindow = popup
+    @objc func togglePopup() {
+        if popupWindow.isVisible {
+            popupWindow.orderOut(nil)
+        } else {
+            popupWindow.makeKeyAndOrderFront(nil)
+            popupWindow.center()
+            NSApp.activate(ignoringOtherApps: true)
+        }
     }
 }
