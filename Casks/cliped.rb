@@ -1,6 +1,6 @@
 cask "cliped" do
   version "1.0.0"
-  sha256 "359d4c17496acb90d9b1a14bef5eb6be89f6763ae7e32e5c10343b5883e56b8d"
+  sha256 "3c492d7398852f284ad8b22faf3239a491787990b73f485b08cda67e14ce0780"
 
   url "https://github.com/shepherrrd/homebrew-cliped/releases/download/v1.0.1/Cliped.dmg"
   name "Cliped"
