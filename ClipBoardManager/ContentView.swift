@@ -13,9 +13,9 @@ struct ContentView: View {
 
     var filteredHistory: [ClipboardItem] {
         if searchText.isEmpty {
-            return monitor.history.reversed()
+            return monitor.history
         } else {
-            return monitor.history.reversed().filter {
+            return monitor.history.filter {
                 $0.content.localizedCaseInsensitiveContains(searchText)
             }
         }
