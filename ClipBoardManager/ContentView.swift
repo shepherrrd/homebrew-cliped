@@ -10,13 +10,19 @@ struct ContentView: View {
     @State private var lastDeletedItem: ClipboardItem?
     @State private var showUndoToast = false
     @State private var toastMessage = ""
+    @State private var undoAction: (() -> Void)? = nil
 
     var filteredHistory: [ClipboardItem] {
         if searchText.isEmpty {
             return monitor.history
         } else {
             return monitor.history.filter {
-                $0.content.localizedCaseInsensitiveContains(searchText)
+                switch $0.content {
+                case .text(let value):
+                    return value.localizedCaseInsensitiveContains(searchText)
+                case .image:
+                    return false
+                }
             }
         }
     }
@@ -27,6 +33,33 @@ struct ContentView: View {
                 Text("📋 Clipboard History")
                     .font(.headline)
                 Spacer()
+                Button(action: {
+                    let window = NSWindow(
+                        contentRect: NSRect(x: 0, y: 0, width: 500, height: 600),
+                        styleMask: [.titled, .closable],
+                        backing: .buffered, defer: false)
+                    window.center()
+                    window.title = "Settings"
+
+                    let discovery = PeerDiscoveryService()
+                    discovery.startBrowsing()
+
+                    window.contentView = NSHostingView(
+                        rootView: SyncSettingsView(
+                            discoveryService: discovery,
+                            onPeerAdd: { hostname in
+                                monitor.addPeer(host: hostname) 
+                            }
+                        )
+                    )
+
+                    window.makeKeyAndOrderFront(nil)
+                }) {
+                    Image(systemName: "gearshape")
+                }
+                .help("Settings")
+
+
                 Button(action: {
                     showClearAlert = true
                 }) {
@@ -65,15 +98,20 @@ struct ContentView: View {
                             HStack {
                                 Button(action: {
                                     NSPasteboard.general.clearContents()
-                                    NSPasteboard.general.setString(item.content, forType: .string)
+                                    switch item.content {
+                                    case .text(let value):
+                                        NSPasteboard.general.setString(value, forType: .string)
+                                    case .image(let data):
+                                        if let image = NSImage(data: data) {
+                                            NSPasteboard.general.writeObjects([image])
+                                        }
+                                    }
                                     monitor.saveHistory()
                                     NSApp.keyWindow?.close()
                                 }) {
                                     VStack(alignment: .leading, spacing: 2) {
                                         HStack {
-                                            Text(truncatedText(for: item))
-                                                .font(.body)
-                                                .lineLimit(1)
+                                            displayContent(for: item)
                                             Spacer()
                                             Button(action: {
                                                 toggleExpand(item)
@@ -86,10 +124,12 @@ struct ContentView: View {
                                         }
 
                                         if expandedItems.contains(item.id) {
-                                            Text(item.content)
-                                                .font(.caption)
-                                                .foregroundColor(.gray)
-                                                .padding(.top, 2)
+                                            if case let .text(fullText) = item.content {
+                                                Text(fullText)
+                                                    .font(.caption)
+                                                    .foregroundColor(.gray)
+                                                    .padding(.top, 2)
+                                            }
                                         }
 
                                         Text("📅 \(formattedDate(item.timestamp)) • 🖥 \(item.device)")
@@ -105,7 +145,7 @@ struct ContentView: View {
                                     monitor.saveHistory()
                                     toastWithUndo("Deleted item") {
                                         if let deleted = lastDeletedItem {
-                                            monitor.history.append(deleted)
+                                            monitor.history.insert(deleted, at: 0)
                                             monitor.saveHistory()
                                         }
                                     }
@@ -147,7 +187,7 @@ struct ContentView: View {
         .background(.ultraThinMaterial)
     }
 
-    // MARK: - Helper Methods
+    // MARK: - Helpers
 
     private func toggleExpand(_ item: ClipboardItem) {
         if expandedItems.contains(item.id) {
@@ -157,20 +197,12 @@ struct ContentView: View {
         }
     }
 
-    private func truncatedText(for item: ClipboardItem) -> String {
-        item.content.count > 60
-            ? String(item.content.prefix(60)) + "..."
-            : item.content
-    }
-
     private func formattedDate(_ date: Date) -> String {
         let formatter = DateFormatter()
         formatter.dateStyle = .short
         formatter.timeStyle = .short
         return formatter.string(from: date)
     }
-
-    @State private var undoAction: (() -> Void)? = nil
 
     private func toastWithUndo(_ message: String, undo: @escaping () -> Void) {
         toastMessage = message
@@ -185,4 +217,28 @@ struct ContentView: View {
             }
         }
     }
+
+    @ViewBuilder
+    private func displayContent(for item: ClipboardItem) -> some View {
+        switch item.content {
+        case .text(let text):
+            Text(text.count > 60 ? String(text.prefix(60)) + "..." : text)
+                .font(.body)
+                .lineLimit(1)
+
+        case .image(let data):
+            if let nsImage = NSImage(data: data) {
+                Image(nsImage: nsImage)
+                    .resizable()
+                    .aspectRatio(contentMode: .fit)
+                    .frame(maxWidth: .infinity, maxHeight: 200)
+            } else {
+                Text("⚠️ Invalid image")
+                    .foregroundColor(.red)
+            }
+        }
+    }
+
+
+
 }

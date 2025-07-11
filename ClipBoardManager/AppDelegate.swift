@@ -5,6 +5,9 @@ class AppDelegate: NSObject, NSApplicationDelegate {
     var statusItem: NSStatusItem!
     var popupWindow: NSWindow!
     var monitor = ClipboardMonitor()
+    
+    var peerDiscovery = PeerDiscoveryService()
+        var peerAdvertiser: PeerAdvertiserService?
 
     func applicationDidFinishLaunching(_ notification: Notification) {
         // Set up ⌃ + V global shortcut
@@ -13,7 +16,13 @@ class AppDelegate: NSObject, NSApplicationDelegate {
                 self.togglePopup()
             }
         }
+        peerAdvertiser = PeerAdvertiserService(port: 8888)
+                peerAdvertiser?.start()
 
+        
+        
+
+        
         // Setup system tray icon
         statusItem = NSStatusBar.system.statusItem(withLength: NSStatusItem.squareLength)
         if let button = statusItem.button {
@@ -23,7 +32,8 @@ class AppDelegate: NSObject, NSApplicationDelegate {
 
         createPopup()
     }
-
+    func applicationWillTerminate(_ aNotification: Notification) {}
+    
     func createPopup() {
         let contentView = ContentView(monitor: monitor)
         popupWindow = NSWindow(

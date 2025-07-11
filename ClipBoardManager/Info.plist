@@ -4,34 +4,24 @@
 <dict>
 	<key>CFBundleName</key>
 	<string>Cliped</string>
-
 	<key>CFBundleDisplayName</key>
 	<string>Cliped</string>
-
 	<key>CFBundleIdentifier</key>
 	<string>com.shepherrrd.cliped</string>
-
 	<key>CFBundleVersion</key>
 	<string>1.0</string>
-
 	<key>CFBundleShortVersionString</key>
 	<string>1.0</string>
-
 	<key>CFBundlePackageType</key>
 	<string>APPL</string>
-
 	<key>CFBundleIconFile</key>
 	<string>AppIcon</string>
-
 	<key>NSMainNibFile</key>
 	<string></string>
-
 	<key>LSApplicationCategoryType</key>
 	<string>public.app-category.productivity</string>
-
 	<key>NSHighResolutionCapable</key>
 	<true/>
-
 	<key>UILaunchScreen</key>
 	<dict>
 		<key>UIColorName</key>
@@ -39,6 +29,11 @@
 		<key>UIImageName</key>
 		<string>logo</string>
 	</dict>
+	<key>NSBonjourServices</key>
+	<array>
+		<string>_clipboard-sync.tcp</string>
+	</array>
+	<key>NSLocalNetworkUsageDescription</key>
+	<string>Clipboard sharing requires local network access.</string>
 </dict>
 </plist>
-
